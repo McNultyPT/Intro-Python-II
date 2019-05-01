@@ -40,7 +40,35 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 
-player = Player('Guybrush Threepwood', 'outside')
+player = Player('Guybrush Threepwood', room['outside'].name)
+
+def current():
+    for i in room:
+        if player.current_room == room[i].name:
+            print(room[i].name)
+            print(room[i].description)
+            return room[i]
+
+def move(current_room, make_move):
+    moving = make_move + '_to'
+    destination = getattr(current_room, moving)
+    player.current_room = destination.name
+    print('Invalid entry.')
+    return player
+
+def initiate():
+    while True:
+        start = current()
+        cmd = input('\n Choose a direction: [n] North [s] South [e] East [w] West or [q] to Quit\n')
+        if cmd == 'q':
+            print('Thanks for playing!')
+            break
+        elif cmd == 'n' or cmd == 's' or cmd == 'e' or cmd == 'w':
+            move(start, cmd)
+        else:
+            print('Invalid command')
+
+initiate()
 
 # Write a loop that:
 #
