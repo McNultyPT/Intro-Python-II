@@ -72,7 +72,7 @@ def initiate():
             except AttributeError:
                 print('That way is blocked. Try another direction.')
         else:
-            print('Invalid command')
+            print('Please enter a valid command.')
 
 initiate()
 
