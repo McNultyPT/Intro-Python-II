@@ -6,14 +6,14 @@ from item import Item
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons", [Item('sword', 'weathered and rusty')]),
+                     "North of you, the cave mount beckons.", [Item('sword', 'weathered and rusty')]),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east.""", [Item('torch', 'recently extinguished'), Item('key', 'quite old')]),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm.""", [Item('scroll', 'to be covered in dust')]),
+the distance, but there is no way across the chasm.""", [Item('scroll', 'to have a faded map on it')]),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
 to north. The smell of gold permeates the air.""", [Item('coin', 'patinaed')]),
@@ -46,10 +46,9 @@ player = Player('Guybrush Threepwood', room['outside'].name)
 def current():
     for i in room:
         if player.current_room == room[i].name:
-            print(f'You are at the {room[i].name}\n')
-            print(f'{room[i].description}\n')
+            print(f'You have entered the {room[i].name}. {room[i].description}\n')
             for item in room[i].items:
-                print(f'You see a {item.name}, which looks {item.description}\n')
+                print(f'You notice a {item.name}, which looks {item.description}.')
             return room[i]
 
 def move(current_room, make_move):
@@ -59,18 +58,19 @@ def move(current_room, make_move):
     return player
 
 def initiate():
+    print(f'Welcome, {player.name}!\n')
+
     while True:
-        print(f'Welcome, {player.name}!\n')
         start_location = current()
-        cmd = input('Choose a direction: [n] North [s] South [e] East [w] West or [q] Quit\n')
+        cmd = input('\n<== Choose a direction: [n] North [s] South [e] East [w] West or [q] Quit ==>\n')
         if cmd == 'q':
-            print('Thanks for playing!')
+            print(f'\nSee you next time, {player.name}!')
             break
         elif cmd == 'n' or cmd == 's' or cmd == 'e' or cmd == 'w':
             try:
                 move(start_location, cmd)
             except AttributeError:
-                print('Cannot move that direction.')
+                print('That way is blocked. Try another direction.')
         else:
             print('Invalid command')
 
