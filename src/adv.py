@@ -58,13 +58,16 @@ def move(current_room, make_move):
 
 def initiate():
     while True:
-        start = current()
+        start_location = current()
         cmd = input('\n Choose a direction: [n] North [s] South [e] East [w] West or [q] to Quit\n')
         if cmd == 'q':
             print('Thanks for playing!')
             break
         elif cmd == 'n' or cmd == 's' or cmd == 'e' or cmd == 'w':
-            move(start, cmd)
+            try:
+                move(start_location, cmd)
+            except AttributeError:
+                print('Cannot move that direction.')
         else:
             print('Invalid command')
 
