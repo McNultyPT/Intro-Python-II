@@ -6,21 +6,21 @@ from item import Item
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+                     "North of you, the cave mount beckons", [Item('sword', 'weathered and rusty')]),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east."""),
+passages run north and east.""", [Item('torch', 'recently extinguished'), Item('key', 'quite old')]),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm."""),
+the distance, but there is no way across the chasm.""", [Item('scroll', 'to be covered in dust')]),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
-to north. The smell of gold permeates the air."""),
+to north. The smell of gold permeates the air.""", [Item('coin', 'patinaed')]),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+earlier adventurers. The only exit is to the south.""", [Item('shovel', 'covered in fresh dirt'), Item('coin', 'patinaed')]),
 }
 
 
@@ -46,8 +46,10 @@ player = Player('Guybrush Threepwood', room['outside'].name)
 def current():
     for i in room:
         if player.current_room == room[i].name:
-            print(room[i].name)
-            print(room[i].description)
+            print(f'You are at the {room[i].name}\n')
+            print(f'{room[i].description}\n')
+            for item in room[i].items:
+                print(f'You see a {item.name}, which looks {item.description}\n')
             return room[i]
 
 def move(current_room, make_move):
@@ -58,8 +60,9 @@ def move(current_room, make_move):
 
 def initiate():
     while True:
+        print(f'Welcome, {player.name}!\n')
         start_location = current()
-        cmd = input('\n Choose a direction: [n] North [s] South [e] East [w] West or [q] Quit\n')
+        cmd = input('Choose a direction: [n] North [s] South [e] East [w] West or [q] Quit\n')
         if cmd == 'q':
             print('Thanks for playing!')
             break
