@@ -53,13 +53,12 @@ def move(current_room, make_move):
     moving = make_move + '_to'
     destination = getattr(current_room, moving)
     player.current_room = destination.name
-    print('Invalid entry.')
     return player
 
 def initiate():
     while True:
         start_location = current()
-        cmd = input('\n Choose a direction: [n] North [s] South [e] East [w] West or [q] to Quit\n')
+        cmd = input('\n Choose a direction: [n] North [s] South [e] East [w] West or [q] Quit\n')
         if cmd == 'q':
             print('Thanks for playing!')
             break
