@@ -6,21 +6,29 @@ from item import Item
 
 room = {
     'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons.", [Item('sword', 'weathered and rusty')]),
+                     "North of you, the cave mount beckons."),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-passages run north and east.""", [Item('torch', 'recently extinguished'), Item('key', 'quite old')]),
+passages run north and east."""),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm.""", [Item('scroll', 'to have a faded map on it')]),
+the distance, but there is no way across the chasm."""),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
-to north. The smell of gold permeates the air.""", [Item('coin', 'patinaed')]),
+to north. The smell of gold permeates the air."""),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south.""", [Item('shovel', 'covered in fresh dirt'), Item('coin', 'patinaed')]),
+earlier adventurers. The only exit is to the south."""),
+}
+
+item = {
+    'sword': Item('sword', 'weathered and rusty'),
+    'torch': Item('torch', 'recently extinguished'),
+    'scroll': Item('scroll', 'to have a faded map on it'),
+    'coin': Item('coin', 'patinaed'),
+    'shovel': Item('shovel', 'covered in fresh dirt')
 }
 
 
@@ -35,6 +43,8 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
+room['outside'].items = [item['sword']]
+
 #
 # Main
 #
@@ -47,13 +57,13 @@ def current():
     for i in room:
         if player.current_room == room[i].name:
             print(f'You have entered the {room[i].name}. {room[i].description}\n')
-            for item in room[i].items:
-                print(f'You notice a {item.name}, which looks {item.description}.')
+            for x in room[i].items:
+                print(f'You notice a {x.name}, which looks {x.description}.')
             return room[i]
 
 def move(current_room, make_move):
-    moving = make_move + '_to'
-    destination = getattr(current_room, moving)
+    new_room = make_move + '_to'
+    destination = getattr(current_room, new_room)
     player.current_room = destination.name
     return player
 
@@ -62,15 +72,33 @@ def initiate():
 
     while True:
         start_location = current()
-        cmd = input('\n<== Choose a direction: [n] North [s] South [e] East [w] West or [q] Quit ==>\n')
-        if cmd == 'q':
+
+        cmd = input('\n<== Choose a direction: [n] North [s] South [e] East [w] West or [q] Quit ==>\n').split()
+        cmd_one = cmd[0]
+        cmd_two = cmd[-1]    
+
+        if cmd_one == 'q':
             print(f'\nSee you next time, {player.name}!')
             break
-        elif cmd == 'n' or cmd == 's' or cmd == 'e' or cmd == 'w':
+        elif cmd_one == 'n' or cmd_one == 's' or cmd_one == 'e' or cmd_one == 'w':
             try:
-                move(start_location, cmd)
+                move(start_location, cmd_one)
             except AttributeError:
                 print('That way is blocked. Try another direction.')
+        elif cmd_one == 'take':
+            try:
+                for x in room:
+                    items = room[x].items
+
+                    for i in items:
+                        if i.name == cmd_two:
+                            player.inventory.append(item[i.name])
+                            items.remove(i)
+                            print(f'You pick up a {i.name}') 
+                        else:
+                            print('That item does not exist.')
+            except AttributeError:
+                print('That item does not exist.')         
         else:
             print('Please enter a valid command.')
 
