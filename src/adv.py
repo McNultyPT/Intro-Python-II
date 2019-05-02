@@ -23,6 +23,8 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
 
+# list of items
+
 item = {
     'sword': Item('sword', 'weathered and rusty'),
     'torch': Item('torch', 'recently extinguished'),
@@ -43,6 +45,8 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
+# Adds items to rooms
+
 room['outside'].items = [item['sword']]
 room['foyer'].items = [item['torch']]
 room['overlook'].items = [item['scroll'], item['coin']]
@@ -54,80 +58,80 @@ room['treasure'].items = [item['shovel'], item['coin']]
 #
 
 # Make a new player object that is currently in the 'outside' room.
-
 player = Player('Guybrush Threepwood', room['outside'].name)
 
+# Print current room and items
 def current():
     for i in room:
         if player.current_room == room[i].name:
-            print(f'You have entered the {room[i].name}. {room[i].description}\n')
+            print(
+                f'You have entered the {room[i].name}. {room[i].description}\n')
             for x in room[i].items:
                 print(f'You notice a {x.name}, which looks {x.description}.')
             return room[i]
 
+# move player
 def move(current_room, make_move):
     new_room = make_move + '_to'
     destination = getattr(current_room, new_room)
     player.current_room = destination.name
     return player
 
+# start loop
 def initiate():
     print(f'Welcome, {player.name}!\n')
 
     while True:
         start_location = current()
-
-        cmd = input('\n<== Move: [n] North [s] South [e] East [w] West, Pickup or Drop item: [p] [d], Inventory: [i] or Quit: [q] ==>\n').split()
+        cmd = input(
+            '\n<== Move: [n] North [s] South [e] East [w] West, Pickup or Drop item: [p] [d], Inventory: [i] or Quit: [q] ==>\n').split()
         cmd_one = cmd[0]
-        cmd_two = cmd[-1]    
+        cmd_two = cmd[-1]
 
+        # quit
         if cmd_one == 'q':
             print(f'\nSee you next time, {player.name}!')
             break
+        # move
         elif cmd_one == 'n' or cmd_one == 's' or cmd_one == 'e' or cmd_one == 'w':
             try:
                 move(start_location, cmd_one)
             except AttributeError:
                 print('That way is blocked. Try another direction.\n')
+        # pickup item
         elif cmd_one == 'p':
-            try:
-                for x in room:
-                    items = room[x].items
-
-                    for i in items:
-                        if i.name == cmd_two:
-                            player.inventory.append(item[i.name])
-                            items.remove(i)
-                            print(f'You pick up a {i.name}.\n') 
-                            break
-            except AttributeError:
-                print('That item does not exist.')     
-        elif cmd_one == 'd':
-            try:
-                items = player.inventory
-
+            for x in room:
+                items = room[x].items
                 for i in items:
                     if i.name == cmd_two:
-                        player.inventory.remove(i)
-                        print(f'You drop a {i.name}')
-                        break
-                    else:
-                        print('You do not have that item in your inventory.\n')
-            except:
-                print('You do not have that item in your inventory.\n')
-        elif cmd_one == 'i':
-            try:
-                items = player.inventory
-
-                if len(items) != 0:
-                    for i in items:
-                        print(f'Current inventory: {i}.\n')
+                        player.inventory.append(i.name)
+                        items.remove(i)
+                        print(f'You pick up a {i.name}.\n')
+                    break
                 else:
-                    print('Your inventory is empty.\n')
-            except:
-                print('')
+                    print('That item does not exist.')
+        # drop item
+        elif cmd_one == 'd':
+            items = player.inventory
+            for i in items:
+                if i.name == cmd_two:
+                    player.inventory.remove(i)
+                    print(f'You drop a {i.name}')
+                break
+            else:
+                print('You do not have that item in your inventory.\n')
+        # check inventory
+        elif cmd_one == 'i':
+            items = player.inventory
+            if len(items) != 0:
+                for i in items:
+                    print(f'Current inventory: {i}.\n')
+                    break
+            else:
+                print('Your inventory is empty.\n')
         else:
             print('Please enter a valid command.\n')
+
 
 initiate()
 
@@ -141,5 +145,3 @@ initiate()
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
-
-
