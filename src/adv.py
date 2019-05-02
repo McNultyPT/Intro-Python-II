@@ -44,6 +44,10 @@ room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
 room['outside'].items = [item['sword']]
+room['foyer'].items = [item['torch']]
+room['overlook'].items = [item['scroll'], item['coin']]
+room['narrow'].items = [item['coin']]
+room['treasure'].items = [item['shovel'], item['coin']]
 
 #
 # Main
@@ -84,7 +88,7 @@ def initiate():
             try:
                 move(start_location, cmd_one)
             except AttributeError:
-                print('That way is blocked. Try another direction.')
+                print('That way is blocked. Try another direction.\n')
         elif cmd_one == 'p':
             try:
                 for x in room:
@@ -94,9 +98,8 @@ def initiate():
                         if i.name == cmd_two:
                             player.inventory.append(item[i.name])
                             items.remove(i)
-                            print(f'You pick up a {i.name}') 
-                        else:
-                            print('That item does not exist.')
+                            print(f'You pick up a {i.name}.\n') 
+                            break
             except AttributeError:
                 print('That item does not exist.')     
         elif cmd_one == 'd':
@@ -107,11 +110,24 @@ def initiate():
                     if i.name == cmd_two:
                         player.inventory.remove(i)
                         print(f'You drop a {i.name}')
+                        break
+                    else:
+                        print('You do not have that item in your inventory.\n')
             except:
-                print('You do not have that item in your inventory.')
-                            
+                print('You do not have that item in your inventory.\n')
+        elif cmd_one == 'i':
+            try:
+                items = player.inventory
+
+                if len(items) != 0:
+                    for i in items:
+                        print(f'Current inventory: {i}.\n')
+                else:
+                    print('Your inventory is empty.\n')
+            except:
+                print('')
         else:
-            print('Please enter a valid command.')
+            print('Please enter a valid command.\n')
 
 initiate()
 
