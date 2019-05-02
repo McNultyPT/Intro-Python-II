@@ -83,8 +83,7 @@ def initiate():
 
     while True:
         start_location = current()
-        cmd = input(
-            '\n<== Move: [n] North [s] South [e] East [w] West, Pickup or Drop item: [p] [d], Inventory: [i] or Quit: [q] ==>\n').split()
+        cmd = input('\n<== Move: [n] North [s] South [e] East [w] West, Pickup or Drop item: [p] [d], Inventory: [i] or Quit: [q] ==>\n').split()
         cmd_one = cmd[0]
         cmd_two = cmd[-1]
 
@@ -101,11 +100,11 @@ def initiate():
         # pickup item
         elif cmd_one == 'p':
             for x in room:
-                items = room[x].items
-                for i in items:
+                room_items = room[x].items
+                for i in room_items:
                     if i.name == cmd_two:
                         player.inventory.append(i.name)
-                        items.remove(i)
+                        room_items.remove(i)
                         print(f'You pick up a {i.name}.\n')
                     break
                 else:
@@ -122,11 +121,9 @@ def initiate():
                 print('You do not have that item in your inventory.\n')
         # check inventory
         elif cmd_one == 'i':
-            items = player.inventory
+            items = player.current_inventory()
             if len(items) != 0:
-                for i in items:
-                    print(f'Current inventory: {i}.\n')
-                    break
+                print(f'Current inventory: {items}.\n')
             else:
                 print('Your inventory is empty.\n')
         else:

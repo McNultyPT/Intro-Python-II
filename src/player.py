@@ -8,4 +8,7 @@ class Player():
         self.inventory = []
 
     def __repr__(self):
-        return f'{self.current_room}'
+        return f'{self.current_room}, {self.inventory}'
+
+    def current_inventory(self):
+        return ', '.join(str(item) for item in self.inventory)
