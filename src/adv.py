@@ -73,7 +73,7 @@ def initiate():
     while True:
         start_location = current()
 
-        cmd = input('\n<== Choose a direction: [n] North [s] South [e] East [w] West or [q] Quit ==>\n').split()
+        cmd = input('\n<== Move: [n] North [s] South [e] East [w] West, Pickup or Drop item: [p] [d], Inventory: [i] or Quit: [q] ==>\n').split()
         cmd_one = cmd[0]
         cmd_two = cmd[-1]    
 
@@ -85,7 +85,7 @@ def initiate():
                 move(start_location, cmd_one)
             except AttributeError:
                 print('That way is blocked. Try another direction.')
-        elif cmd_one == 'take':
+        elif cmd_one == 'p':
             try:
                 for x in room:
                     items = room[x].items
@@ -98,7 +98,18 @@ def initiate():
                         else:
                             print('That item does not exist.')
             except AttributeError:
-                print('That item does not exist.')         
+                print('That item does not exist.')     
+        elif cmd_one == 'd':
+            try:
+                items = player.inventory
+
+                for i in items:
+                    if i.name == cmd_two:
+                        player.inventory.remove(i)
+                        print(f'You drop a {i.name}')
+            except:
+                print('You do not have that item in your inventory.')
+                            
         else:
             print('Please enter a valid command.')
 
