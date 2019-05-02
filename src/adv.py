@@ -65,9 +65,9 @@ def current():
     for i in room:
         if player.current_room == room[i].name:
             print(
-                f'You have entered the {room[i].name}. {room[i].description}\n')
+                f'\nYou have entered the {room[i].name}. {room[i].description}')
             for x in room[i].items:
-                print(f'You notice a {x.name}, which looks {x.description}.')
+                print(f'\nYou notice a {x.name}, which looks {x.description}.')
             return room[i]
 
 # move player
@@ -79,11 +79,11 @@ def move(current_room, make_move):
 
 # start loop
 def initiate():
-    print(f'Welcome, {player.name}!\n')
+    print(f'\nWelcome, {player.name}!')
 
     while True:
         start_location = current()
-        cmd = input('\n<== Move: [n] North [s] South [e] East [w] West, Pickup or Drop item: [p] [d], Inventory: [i] or Quit: [q] ==>\n').split()
+        cmd = input('\n<== Movement: North [n] South [s] East [e] West [w], Pickup [p] or Drop item [d], Inventory [i] or Quit [q] ==>\n').split()
         cmd_one = cmd[0]
         cmd_two = cmd[-1]
 
@@ -96,7 +96,7 @@ def initiate():
             try:
                 move(start_location, cmd_one)
             except AttributeError:
-                print('That way is blocked. Try another direction.\n')
+                print('\nThat way is blocked. Try another direction.')
         # pickup item
         elif cmd_one == 'p':
             for x in room:
@@ -105,29 +105,29 @@ def initiate():
                     if i.name == cmd_two:
                         player.inventory.append(i.name)
                         room_items.remove(i)
-                        print(f'You pick up a {i.name}.\n')
+                        print(f'\nYou pick up a {i.name}.')
                     break
                 else:
-                    print('That item does not exist.')
+                    print('\nThat item does not exist.')
         # drop item
         elif cmd_one == 'd':
             player_items = player.inventory
             for i in player_items:
                 if i == cmd_two:
                     player.inventory.remove(i)
-                    print(f'You drop a {i}')
+                    print(f'\nYou drop a {i}.')
                     break
                 else:
-                    print('You do not have that item in your inventory.\n')
+                    print('\nYou do not have that item in your inventory.')
         # check inventory
         elif cmd_one == 'i':
             items = player.current_inventory()
             if len(items) != 0:
-                print(f'Current inventory: {items}.\n')
+                print(f'\nCurrent inventory: {items}.')
             else:
-                print('Your inventory is empty.\n')
+                print('\nYour inventory is empty.')
         else:
-            print('Please enter a valid command.\n')
+            print('\nPlease enter a valid command.')
 
 
 initiate()
