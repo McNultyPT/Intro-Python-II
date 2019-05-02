@@ -111,14 +111,14 @@ def initiate():
                     print('That item does not exist.')
         # drop item
         elif cmd_one == 'd':
-            items = player.inventory
-            for i in items:
-                if i.name == cmd_two:
+            player_items = player.inventory
+            for i in player_items:
+                if i == cmd_two:
                     player.inventory.remove(i)
-                    print(f'You drop a {i.name}')
-                break
-            else:
-                print('You do not have that item in your inventory.\n')
+                    print(f'You drop a {i}')
+                    break
+                else:
+                    print('You do not have that item in your inventory.\n')
         # check inventory
         elif cmd_one == 'i':
             items = player.current_inventory()
